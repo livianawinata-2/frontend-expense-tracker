@@ -1,1 +1,11 @@
 # frontend-expense-tracker
+## how the website works
+pas websitenya dibuka dan keload (`DOMContentLoaded`), web bakal baca data yang kesave di `localStorage` yang dikasih nama `my_expense_data`. kalo misal belum ada apa-apa, variabel `expenses` diinisialisasi sebagai array kosong `[]`. tanggalnya otomatis ngikutin tanggal hari ini pake fungsi `setDefaultDate()`. kalo misal udah pernah ada data, nanti fungsi `renderList` di-run biar history pengeluarannya bisa di-output.
+
+nah kalo nambah data, pas udah pencet "Tambahkan Data", script node.js-nya bakal jalanin fungsi `e.preventDefault()` biar websitenya ga ke-refresh dan formnya bakal dicek biar inputnya valid (gada nama dan/atau nominalnya <= 0). kalo udah valid nanti datanya bakal dibuatin id khusus gitu (`id: Date.now()`) biar nanti bisa diformat jadi bagus terus dimasukkin ke array di posisi indeks paling awal pake `expenses.unshift(newItem)` biar data yang paling baru nongol paling atas. datanya nanti disimpen ke `localStorage` terus UI-nya bakal langsung di-refresh.
+
+kalo datanya udah berhasil ditambahin tadi, nanti total pengeluarannya bakal diitung pake fungsi `updateTotals()` terus banyak transaksinya diitung dari `expenses.length`. nominalnya bakal diformat pake `Intl.NumberFormat('id-ID')`. nanti fungsi `renderList()` bakal output elemen HTML tiap transaksi ke container `#expenseList`. kalo misal gada data, class `.show` ditambahin ke elemen `#emptyState` biar yang muncul tampilan "Belum Ada Pengeluaran"
+
+kalo pengen hapus listnya satu-satu, pas logo tong sampah dipencet nanti fungsi `deleteExpense(id)` bakal aktif terus muncul alert buat konfirmasi mau hapus beneran ato kepencet doang. kalo beneran mau hapus, nanti ID dari pengeluaran yang dihapus bakal di-filter keluar dari array pake fungsi `expenses.filter()`.
+
+kalo mau hapus semua isi dari list sekaligus, pencet tombol "Reset". nanti kodenya bakal ngecek dulu apakah array-nya ada isi ato kosong, kalo misal udah kosong nanti aksinya di-stop. kalo masih ada datanya nanti bakal muncul alert konfirmasi lagi buat mastiin user bukan salah pencet, terus kalo beneran mau apus nanti variabel `expenses` bakal dibalikin jadi array kosong lagi (`expenses = []`) dan update ini di-save ke `localStorage`.
